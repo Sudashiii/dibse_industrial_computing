@@ -1,0 +1,13 @@
+.env
+.venv/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+data/inventory.db
+data/audit_events.jsonl
+
+logs/*.log
+!logs/demo_run.log
+!logs/litellm_run.log
