@@ -23,4 +23,10 @@ uv run pytest
 uv run python mcp_server.py
 ```
 
+## Lokale MCP-Demo
+
+```bash
+uv run python demo_client.py
+```
+
 Die LiteLLM-Konfiguration wird später über eine lokale `.env`-Datei eingerichtet.
