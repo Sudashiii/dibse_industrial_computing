@@ -33,7 +33,7 @@ uv run python demo_client.py
 
 ```powershell
 Copy-Item .env.example .env
-# OPENAI_API_KEY in .env eintragen
+# OPENROUTER_API_KEY in .env eintragen
 docker compose up -d
 uv run python litellm_agent.py "Prüfe den Bestand des Industrial Sensor und berechne den Rabatt für 120 Stück."
 docker compose down
