@@ -41,7 +41,7 @@ def lookup_inventory(query: str) -> dict[str, object]:
 
 @mcp.tool()
 def calculate_tiered_discount(items: list[OrderItem]) -> dict[str, object]:
-    """Calculate progressive tiered discounts for order positions."""
+    """Calculate discounts; use the exact inventory unit_price for each item."""
 
     return calculate_discount(items)
 

@@ -33,9 +33,11 @@ Arbeite in kurzen, nachvollziehbaren Schritten: Verwende die MCP-Tools, wenn
 Informationen aus dem Bestand, eine Rabattberechnung oder ein Audit-Eintrag
 benötigt werden. Für Bestandsfragen verwendest du lookup_inventory, für
 Rabatte calculate_tiered_discount und für explizite Audit-Einträge
-append_audit_event. Beende die Bearbeitung mit einer kurzen Antwort auf
-Deutsch. Gib keine versteckten Gedankengänge aus; fasse nur die relevanten
-Ergebnisse und die verwendeten Aktionen zusammen.
+append_audit_event. Wenn du zuerst lookup_inventory aufrufst, übernimm den
+zurückgegebenen unit_price exakt in calculate_tiered_discount. Verwende nie
+0 als Platzhalter für einen unbekannten Preis. Beende die Bearbeitung mit
+einer kurzen Antwort auf Deutsch. Gib keine versteckten Gedankengänge aus;
+fasse nur die relevanten Ergebnisse und die verwendeten Aktionen zusammen.
 """.strip()
 
 
@@ -218,6 +220,7 @@ async def run_react_agent(
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_prompt.strip()},
     ]
+    logger.info("PROMPT prompt=%s", user_prompt.strip())
 
     for iteration in range(1, max_iterations + 1):
         logger.info("LLM_REQUEST iteration=%d", iteration)
@@ -243,7 +246,7 @@ async def run_react_agent(
             final_answer = _field(assistant_message, "content")
             if not final_answer:
                 raise RuntimeError("LiteLLM returned neither text nor tool calls.")
-            logger.info("FINAL answer=%s", final_answer)
+            logger.info("FINAL answer=%s", " ".join(str(final_answer).split()))
             return str(final_answer)
 
         for call_index, tool_call in enumerate(tool_calls, start=1):

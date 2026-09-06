@@ -11,3 +11,4 @@ data/audit_events.jsonl
 logs/*.log
 !logs/demo_run.log
 !logs/litellm_run.log
+!logs/litellm_run_prompt*.log
