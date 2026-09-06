@@ -18,11 +18,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_LOG_PATH = PROJECT_ROOT / "logs" / "demo_run.log"
 
 
-def configure_logging(log_path: Path) -> logging.Logger:
-    """Configure console and UTF-8 file logging for one demo run."""
+def configure_logging(
+    log_path: Path,
+    logger_name: str = "homework.mcp_demo",
+) -> logging.Logger:
+    """Configure console and UTF-8 file logging for one run."""
 
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    logger = logging.getLogger("homework.mcp_demo")
+    logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
     logger.propagate = False
 

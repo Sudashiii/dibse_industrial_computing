@@ -29,4 +29,12 @@ uv run python mcp_server.py
 uv run python demo_client.py
 ```
 
-Die LiteLLM-Konfiguration wird später über eine lokale `.env`-Datei eingerichtet.
+## LiteLLM-Agent (optional)
+
+```powershell
+Copy-Item .env.example .env
+# OPENAI_API_KEY in .env eintragen
+docker compose up -d
+uv run python litellm_agent.py "Prüfe den Bestand des Industrial Sensor und berechne den Rabatt für 120 Stück."
+docker compose down
+```
