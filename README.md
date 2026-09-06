@@ -29,7 +29,7 @@ uv run python mcp_server.py
 uv run python demo_client.py
 ```
 
-## LiteLLM-Agent (optional)
+## LiteLLM-Agent
 
 In diesem Projekt ist hinter dem lokalen LiteLLM-Proxy OpenRouter als Provider
 geschaltet, weil dafür bereits ein Account vorhanden war. Der Agent spricht
