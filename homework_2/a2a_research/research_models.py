@@ -93,3 +93,26 @@ class EvidenceResponse(BaseModel):
     evidence: list[EvidenceItem]
 
     model_config = ConfigDict(extra="forbid")
+
+
+class SynthesisRequest(BaseModel):
+    """Payload accepted by the Synthesis Agent."""
+
+    task: Literal["synthesize"]
+    question: str = Field(min_length=3)
+    evidence: list[EvidenceItem]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class SynthesisResponse(BaseModel):
+    """Evidence-grounded answer returned by the Synthesis Agent."""
+
+    task: Literal["synthesis.result"] = "synthesis.result"
+    question: str = Field(min_length=3)
+    answer: str = Field(min_length=1)
+    key_findings: list[str]
+    limitations: list[str]
+    sources: list[str]
+
+    model_config = ConfigDict(extra="forbid")
