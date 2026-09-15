@@ -1,0 +1,21 @@
+[project]
+name = "homework-2-a2a-research"
+version = "0.1.0"
+description = "Distributed A2A literature research workflow with dynamic registry lookup"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.10.0",
+    "uvicorn>=0.34.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.25.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
