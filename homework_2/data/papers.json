@@ -1,0 +1,89 @@
+[
+  {
+    "paper_id": "P-001",
+    "title": "Retrieval-Augmented Generation for Enterprise Knowledge Work",
+    "authors": ["M. Weber", "L. Novak"],
+    "year": 2024,
+    "keywords": [
+      "retrieval",
+      "augmented generation",
+      "enterprise",
+      "knowledge",
+      "vorteile",
+      "unternehmen",
+      "unternehmensanwendungen",
+      "wissensintensive"
+    ],
+    "abstract": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+    "limitations": [
+      "Answer quality depends on retrieval coverage and source freshness.",
+      "The system still needs evaluation for unsupported claims."
+    ],
+    "source": "local-demo-corpus"
+  },
+  {
+    "paper_id": "P-002",
+    "title": "Context Selection and Ranking in Long-Document Retrieval",
+    "authors": ["A. Fischer", "S. Chen"],
+    "year": 2023,
+    "keywords": ["context", "ranking", "retrieval", "limitations", "grenzen", "long documents"],
+    "abstract": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+    "limitations": [
+      "Long-document behavior can vary with context order.",
+      "Retrieval scores alone do not prove answer correctness."
+    ],
+    "source": "local-demo-corpus"
+  },
+  {
+    "paper_id": "P-003",
+    "title": "Evaluating Factuality and Citation Coverage in RAG Systems",
+    "authors": ["N. Rossi", "E. Malik"],
+    "year": 2024,
+    "keywords": ["evaluation", "factuality", "citations", "evidence", "belege", "grounding", "retrieval"],
+    "abstract": "Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer.",
+    "limitations": [
+      "Evaluation metrics may disagree across domains.",
+      "Citation completeness does not replace human review of important claims."
+    ],
+    "source": "local-demo-corpus"
+  },
+  {
+    "paper_id": "P-004",
+    "title": "Human Review for High-Stakes Research Assistants",
+    "authors": ["K. Bauer", "R. Singh"],
+    "year": 2022,
+    "keywords": ["human review", "risk", "compliance", "high stakes", "risiko", "quality"],
+    "abstract": "Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies.",
+    "limitations": [
+      "Review introduces operational cost and latency.",
+      "Reviewers need clear evidence and escalation criteria."
+    ],
+    "source": "local-demo-corpus"
+  },
+  {
+    "paper_id": "P-005",
+    "title": "Metadata and Access Control for Organizational Search",
+    "authors": ["T. Hoffmann", "J. Park"],
+    "year": 2023,
+    "keywords": ["metadata", "access control", "privacy", "permissions", "zugriff", "organizational search"],
+    "abstract": "Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed.",
+    "limitations": [
+      "Permission metadata must remain synchronized with source systems.",
+      "Strict filters can reduce recall for legitimate users."
+    ],
+    "source": "local-demo-corpus"
+  },
+  {
+    "paper_id": "P-006",
+    "title": "Operational Monitoring of Knowledge Assistants",
+    "authors": ["D. Klein", "F. Okafor"],
+    "year": 2024,
+    "keywords": ["monitoring", "drift", "maintenance", "stale documents", "wartung", "operations"],
+    "abstract": "Knowledge assistants require monitoring for retrieval drift, stale documents and changes in source quality; maintenance is an ongoing part of deployment.",
+    "limitations": [
+      "Monitoring requires representative evaluation queries.",
+      "Maintenance effort grows with the number of connected sources."
+    ],
+    "source": "local-demo-corpus"
+  }
+]
