@@ -3,8 +3,9 @@
 ## Current status
 
 The shared FastAPI/A2A protocol layer, dynamic registry, Literature Search,
-Evidence Extraction and Synthesis Agents are scaffolded. Docker Compose and
-the final workflow are added in the following commits.
+Evidence Extraction and Synthesis Agents are available. The Orchestrator now
+discovers all three agents dynamically by capability. Docker Compose and the
+final workflow evidence are added in the following commits.
 
 ## Local setup
 
@@ -38,4 +39,15 @@ Start the synthesis agent in a fourth terminal:
 ```powershell
 $env:A2A_REGISTRY_URL = "http://127.0.0.1:8000"
 uv run uvicorn a2a_research.synthesis_agent:app --host 127.0.0.1 --port 8103
+```
+
+After all four processes are running, start the complete workflow from a
+fifth terminal. The Orchestrator looks up each capability in the Registry and
+passes the structured result of one agent to the next:
+
+```powershell
+$env:A2A_REGISTRY_URL = "http://127.0.0.1:8000"
+uv run python -m a2a_research.orchestrator `
+  --question "Welche Vorteile und Grenzen haben Retrieval-Systeme?" `
+  --top-k 2
 ```
