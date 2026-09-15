@@ -1,0 +1,153 @@
+services:
+  registry:
+    build: .
+    command:
+      - uv
+      - run
+      - uvicorn
+      - a2a_research.registry_app:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  search-agent:
+    build: .
+    command:
+      - uv
+      - run
+      - uvicorn
+      - a2a_research.search_agent:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8101"
+    environment:
+      A2A_SERVICE_NAME: search-agent
+      A2A_HOST: 0.0.0.0
+      A2A_PORT: "8101"
+      A2A_REGISTRY_URL: http://registry:8000
+      A2A_PUBLIC_URL: http://search-agent:8101/a2a
+    ports:
+      - "8101:8101"
+    depends_on:
+      registry:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8101/health', timeout=2)
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  evidence-agent:
+    build: .
+    command:
+      - uv
+      - run
+      - uvicorn
+      - a2a_research.evidence_agent:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8102"
+    environment:
+      A2A_SERVICE_NAME: evidence-agent
+      A2A_HOST: 0.0.0.0
+      A2A_PORT: "8102"
+      A2A_REGISTRY_URL: http://registry:8000
+      A2A_PUBLIC_URL: http://evidence-agent:8102/a2a
+    ports:
+      - "8102:8102"
+    depends_on:
+      registry:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8102/health', timeout=2)
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  synthesis-agent:
+    build: .
+    command:
+      - uv
+      - run
+      - uvicorn
+      - a2a_research.synthesis_agent:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8103"
+    environment:
+      A2A_SERVICE_NAME: synthesis-agent
+      A2A_HOST: 0.0.0.0
+      A2A_PORT: "8103"
+      A2A_REGISTRY_URL: http://registry:8000
+      A2A_PUBLIC_URL: http://synthesis-agent:8103/a2a
+    ports:
+      - "8103:8103"
+    depends_on:
+      registry:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8103/health', timeout=2)
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  orchestrator:
+    build: .
+    profiles:
+      - workflow
+    entrypoint:
+      - uv
+      - run
+      - python
+      - -m
+      - a2a_research.orchestrator
+    command:
+      - --question
+      - Welche Vorteile und Grenzen haben Retrieval-Systeme?
+      - --top-k
+      - "2"
+    environment:
+      A2A_REGISTRY_URL: http://registry:8000
+    depends_on:
+      search-agent:
+        condition: service_healthy
+      evidence-agent:
+        condition: service_healthy
+      synthesis-agent:
+        condition: service_healthy
+    restart: "no"

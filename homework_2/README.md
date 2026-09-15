@@ -51,3 +51,22 @@ uv run python -m a2a_research.orchestrator `
   --question "Welche Vorteile und Grenzen haben Retrieval-Systeme?" `
   --top-k 2
 ```
+
+## Docker Compose
+
+Docker Desktop with Compose is required. The same four processes can be
+started as containers:
+
+```powershell
+docker compose config --quiet
+docker compose up --build -d registry search-agent evidence-agent synthesis-agent
+docker compose --profile workflow run --rm orchestrator `
+  --question "Welche Vorteile und Grenzen haben Retrieval-Systeme?" `
+  --top-k 2
+docker compose down
+```
+
+The agent containers register themselves with the `registry` service. The
+Orchestrator receives their container URLs from the Registry, so no agent URL
+is hard-coded into the workflow. The Compose `orchestrator` service is kept in
+the `workflow` profile because it is a one-shot command.
