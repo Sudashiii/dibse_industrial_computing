@@ -70,3 +70,16 @@ The agent containers register themselves with the `registry` service. The
 Orchestrator receives their container URLs from the Registry, so no agent URL
 is hard-coded into the workflow. The Compose `orchestrator` service is kept in
 the `workflow` profile because it is a one-shot command.
+
+## Submission evidence
+
+Generate the execution log, structured result and focused terminal screenshot
+with:
+
+```powershell
+uv run python scripts/run_demo.py
+uv run python docs/create_submission_pdf.py
+```
+
+The one-page summary is available at `docs/submission_summary.md`; generated
+PDF and evidence files are stored under `output/`.

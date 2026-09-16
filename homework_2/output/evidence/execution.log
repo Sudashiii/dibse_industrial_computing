@@ -1,0 +1,23 @@
+A2A research workflow execution evidence
+question=Welche Vorteile und Grenzen haben Retrieval-Systeme?
+top_k=2
+[2026-09-15T18:27:27+00:00] COMMAND docker compose config --quiet
+[2026-09-15T18:27:27+00:00] RESULT exit=0
+[2026-09-15T18:27:27+00:00] COMMAND docker compose up --build --detach --wait registry search-agent evidence-agent synthesis-agent
+[2026-09-15T18:27:54+00:00] RESULT exit=0
+[2026-09-15T18:27:54+00:00] COMMAND docker compose --profile workflow run --rm orchestrator --question Welche Vorteile und Grenzen haben Retrieval-Systeme? --top-k 2
+[2026-09-15T18:27:59+00:00] RESULT exit=0
+INFO REGISTRY_LOOKUP capability=research.search
+INFO AGENT_SELECTED capability=research.search agent_id=search-agent url=http://search-agent:8101/a2a
+INFO A2A_CALL step=search agent_id=search-agent
+INFO REGISTRY_LOOKUP capability=research.extract_evidence
+INFO AGENT_SELECTED capability=research.extract_evidence agent_id=evidence-agent url=http://evidence-agent:8102/a2a
+INFO A2A_CALL step=evidence agent_id=evidence-agent
+INFO REGISTRY_LOOKUP capability=research.synthesize
+INFO AGENT_SELECTED capability=research.synthesize agent_id=synthesis-agent url=http://synthesis-agent:8103/a2a
+INFO A2A_CALL step=synthesis agent_id=synthesis-agent
+INFO WORKFLOW_COMPLETED question='Welche Vorteile und Grenzen haben Retrieval-Systeme?' agents=search-agent,evidence-agent,synthesis-agent findings=2
+SUMMARY agents=3 search_hits=2 evidence_items=2 synthesis_findings=2
+[2026-09-15T18:27:59+00:00] COMMAND docker compose down --remove-orphans
+[2026-09-15T18:28:01+00:00] RESULT exit=0
+CLEANUP compose_down=ok

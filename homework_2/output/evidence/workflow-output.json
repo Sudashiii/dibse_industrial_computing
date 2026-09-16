@@ -1,0 +1,104 @@
+{
+  "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+  "agents": [
+    {
+      "capability": "research.search",
+      "agent_id": "search-agent",
+      "url": "http://search-agent:8101/a2a"
+    },
+    {
+      "capability": "research.extract_evidence",
+      "agent_id": "evidence-agent",
+      "url": "http://evidence-agent:8102/a2a"
+    },
+    {
+      "capability": "research.synthesize",
+      "agent_id": "synthesis-agent",
+      "url": "http://synthesis-agent:8103/a2a"
+    }
+  ],
+  "search": {
+    "task": "search.result",
+    "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+    "hits": [
+      {
+        "paper_id": "P-001",
+        "title": "Retrieval-Augmented Generation for Enterprise Knowledge Work",
+        "authors": [
+          "M. Weber",
+          "L. Novak"
+        ],
+        "year": 2024,
+        "score": 12,
+        "abstract": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+        "limitations": [
+          "Answer quality depends on retrieval coverage and source freshness.",
+          "The system still needs evaluation for unsupported claims."
+        ],
+        "source": "local-demo-corpus"
+      },
+      {
+        "paper_id": "P-002",
+        "title": "Context Selection and Ranking in Long-Document Retrieval",
+        "authors": [
+          "A. Fischer",
+          "S. Chen"
+        ],
+        "year": 2023,
+        "score": 11,
+        "abstract": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+        "limitations": [
+          "Long-document behavior can vary with context order.",
+          "Retrieval scores alone do not prove answer correctness."
+        ],
+        "source": "local-demo-corpus"
+      }
+    ]
+  },
+  "evidence": {
+    "task": "evidence.result",
+    "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+    "evidence": [
+      {
+        "paper_id": "P-001",
+        "title": "Retrieval-Augmented Generation for Enterprise Knowledge Work",
+        "claim": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+        "evidence_quote": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+        "limitations": [
+          "Answer quality depends on retrieval coverage and source freshness.",
+          "The system still needs evaluation for unsupported claims."
+        ],
+        "source": "local-demo-corpus"
+      },
+      {
+        "paper_id": "P-002",
+        "title": "Context Selection and Ranking in Long-Document Retrieval",
+        "claim": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+        "evidence_quote": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+        "limitations": [
+          "Long-document behavior can vary with context order.",
+          "Retrieval scores alone do not prove answer correctness."
+        ],
+        "source": "local-demo-corpus"
+      }
+    ]
+  },
+  "synthesis": {
+    "task": "synthesis.result",
+    "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+    "answer": "Based on 2 source(s), the available evidence indicates: [P-001] Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work. [P-002] Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+    "key_findings": [
+      "[P-001] Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+      "[P-002] Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important."
+    ],
+    "limitations": [
+      "Answer quality depends on retrieval coverage and source freshness.",
+      "The system still needs evaluation for unsupported claims.",
+      "Long-document behavior can vary with context order.",
+      "Retrieval scores alone do not prove answer correctness."
+    ],
+    "sources": [
+      "local-demo-corpus"
+    ]
+  }
+}
