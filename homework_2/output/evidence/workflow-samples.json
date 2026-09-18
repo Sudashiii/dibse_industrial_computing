@@ -1,0 +1,284 @@
+[
+  {
+    "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+    "agents": [
+      {
+        "capability": "research.search",
+        "agent_id": "search-agent",
+        "url": "http://search-agent:8101/a2a"
+      },
+      {
+        "capability": "research.extract_evidence",
+        "agent_id": "evidence-agent",
+        "url": "http://evidence-agent:8102/a2a"
+      },
+      {
+        "capability": "research.synthesize",
+        "agent_id": "synthesis-agent",
+        "url": "http://synthesis-agent:8103/a2a"
+      }
+    ],
+    "search": {
+      "task": "search.result",
+      "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+      "hits": [
+        {
+          "paper_id": "P-001",
+          "title": "Retrieval-Augmented Generation for Enterprise Knowledge Work",
+          "authors": [
+            "M. Weber",
+            "L. Novak"
+          ],
+          "year": 2024,
+          "score": 12,
+          "abstract": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+          "limitations": [
+            "Answer quality depends on retrieval coverage and source freshness.",
+            "The system still needs evaluation for unsupported claims."
+          ],
+          "source": "local-demo-corpus"
+        },
+        {
+          "paper_id": "P-002",
+          "title": "Context Selection and Ranking in Long-Document Retrieval",
+          "authors": [
+            "A. Fischer",
+            "S. Chen"
+          ],
+          "year": 2023,
+          "score": 11,
+          "abstract": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+          "limitations": [
+            "Long-document behavior can vary with context order.",
+            "Retrieval scores alone do not prove answer correctness."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "evidence": {
+      "task": "evidence.result",
+      "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+      "evidence": [
+        {
+          "paper_id": "P-001",
+          "title": "Retrieval-Augmented Generation for Enterprise Knowledge Work",
+          "claim": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+          "evidence_quote": "Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+          "limitations": [
+            "Answer quality depends on retrieval coverage and source freshness.",
+            "The system still needs evaluation for unsupported claims."
+          ],
+          "source": "local-demo-corpus"
+        },
+        {
+          "paper_id": "P-002",
+          "title": "Context Selection and Ranking in Long-Document Retrieval",
+          "claim": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+          "evidence_quote": "Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+          "limitations": [
+            "Long-document behavior can vary with context order.",
+            "Retrieval scores alone do not prove answer correctness."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "synthesis": {
+      "task": "synthesis.result",
+      "question": "Welche Vorteile und Grenzen haben Retrieval-Systeme?",
+      "answer": "Based on 2 source(s), the available evidence indicates: [P-001] Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work. [P-002] Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important.",
+      "key_findings": [
+        "[P-001] Retrieval-augmented generation can ground generated answers in a changing knowledge base and expose supporting passages for enterprise knowledge work.",
+        "[P-002] Adding more retrieved context does not always improve an answer; irrelevant or poorly ordered passages can distract a model, so selection and ranking remain important."
+      ],
+      "limitations": [
+        "Answer quality depends on retrieval coverage and source freshness.",
+        "The system still needs evaluation for unsupported claims.",
+        "Long-document behavior can vary with context order.",
+        "Retrieval scores alone do not prove answer correctness."
+      ],
+      "sources": [
+        "local-demo-corpus"
+      ]
+    }
+  },
+  {
+    "question": "Wie wichtig sind Evaluation und Zitate für RAG-Systeme?",
+    "agents": [
+      {
+        "capability": "research.search",
+        "agent_id": "search-agent",
+        "url": "http://search-agent:8101/a2a"
+      },
+      {
+        "capability": "research.extract_evidence",
+        "agent_id": "evidence-agent",
+        "url": "http://evidence-agent:8102/a2a"
+      },
+      {
+        "capability": "research.synthesize",
+        "agent_id": "synthesis-agent",
+        "url": "http://synthesis-agent:8103/a2a"
+      }
+    ],
+    "search": {
+      "task": "search.result",
+      "question": "Wie wichtig sind Evaluation und Zitate für RAG-Systeme?",
+      "hits": [
+        {
+          "paper_id": "P-003",
+          "title": "Evaluating Factuality and Citation Coverage in RAG Systems",
+          "authors": [
+            "N. Rossi",
+            "E. Malik"
+          ],
+          "year": 2024,
+          "score": 9,
+          "abstract": "Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer.",
+          "limitations": [
+            "Evaluation metrics may disagree across domains.",
+            "Citation completeness does not replace human review of important claims."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "evidence": {
+      "task": "evidence.result",
+      "question": "Wie wichtig sind Evaluation und Zitate für RAG-Systeme?",
+      "evidence": [
+        {
+          "paper_id": "P-003",
+          "title": "Evaluating Factuality and Citation Coverage in RAG Systems",
+          "claim": "Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer.",
+          "evidence_quote": "Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer.",
+          "limitations": [
+            "Evaluation metrics may disagree across domains.",
+            "Citation completeness does not replace human review of important claims."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "synthesis": {
+      "task": "synthesis.result",
+      "question": "Wie wichtig sind Evaluation und Zitate für RAG-Systeme?",
+      "answer": "Based on 1 source(s), the available evidence indicates: [P-003] Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer.",
+      "key_findings": [
+        "[P-003] Evaluation should separate retrieval quality, answer correctness and citation completeness; a high retrieval score alone does not guarantee a grounded answer."
+      ],
+      "limitations": [
+        "Evaluation metrics may disagree across domains.",
+        "Citation completeness does not replace human review of important claims."
+      ],
+      "sources": [
+        "local-demo-corpus"
+      ]
+    }
+  },
+  {
+    "question": "Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?",
+    "agents": [
+      {
+        "capability": "research.search",
+        "agent_id": "search-agent",
+        "url": "http://search-agent:8101/a2a"
+      },
+      {
+        "capability": "research.extract_evidence",
+        "agent_id": "evidence-agent",
+        "url": "http://evidence-agent:8102/a2a"
+      },
+      {
+        "capability": "research.synthesize",
+        "agent_id": "synthesis-agent",
+        "url": "http://synthesis-agent:8103/a2a"
+      }
+    ],
+    "search": {
+      "task": "search.result",
+      "question": "Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?",
+      "hits": [
+        {
+          "paper_id": "P-004",
+          "title": "Human Review for High-Stakes Research Assistants",
+          "authors": [
+            "K. Bauer",
+            "R. Singh"
+          ],
+          "year": 2022,
+          "score": 23,
+          "abstract": "Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies.",
+          "limitations": [
+            "Review introduces operational cost and latency.",
+            "Reviewers need clear evidence and escalation criteria."
+          ],
+          "source": "local-demo-corpus"
+        },
+        {
+          "paper_id": "P-005",
+          "title": "Metadata and Access Control for Organizational Search",
+          "authors": [
+            "T. Hoffmann",
+            "J. Park"
+          ],
+          "year": 2023,
+          "score": 20,
+          "abstract": "Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed.",
+          "limitations": [
+            "Permission metadata must remain synchronized with source systems.",
+            "Strict filters can reduce recall for legitimate users."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "evidence": {
+      "task": "evidence.result",
+      "question": "Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?",
+      "evidence": [
+        {
+          "paper_id": "P-004",
+          "title": "Human Review for High-Stakes Research Assistants",
+          "claim": "Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies.",
+          "evidence_quote": "Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies.",
+          "limitations": [
+            "Review introduces operational cost and latency.",
+            "Reviewers need clear evidence and escalation criteria."
+          ],
+          "source": "local-demo-corpus"
+        },
+        {
+          "paper_id": "P-005",
+          "title": "Metadata and Access Control for Organizational Search",
+          "claim": "Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed.",
+          "evidence_quote": "Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed.",
+          "limitations": [
+            "Permission metadata must remain synchronized with source systems.",
+            "Strict filters can reduce recall for legitimate users."
+          ],
+          "source": "local-demo-corpus"
+        }
+      ]
+    },
+    "synthesis": {
+      "task": "synthesis.result",
+      "question": "Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?",
+      "answer": "Based on 2 source(s), the available evidence indicates: [P-004] Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies. [P-005] Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed.",
+      "key_findings": [
+        "[P-004] Human review is useful for high-impact research decisions because automated systems may miss ambiguous evidence or outdated policies.",
+        "[P-005] Organizational retrieval needs metadata filters and permission checks; without them, relevant context can be excluded or unauthorized content can be exposed."
+      ],
+      "limitations": [
+        "Review introduces operational cost and latency.",
+        "Reviewers need clear evidence and escalation criteria.",
+        "Permission metadata must remain synchronized with source systems.",
+        "Strict filters can reduce recall for legitimate users."
+      ],
+      "sources": [
+        "local-demo-corpus"
+      ]
+    }
+  }
+]

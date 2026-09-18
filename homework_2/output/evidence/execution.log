@@ -1,12 +1,14 @@
 A2A research workflow execution evidence
-question=Welche Vorteile und Grenzen haben Retrieval-Systeme?
+questions=3
 top_k=2
-[2026-09-15T18:27:27+00:00] COMMAND docker compose config --quiet
-[2026-09-15T18:27:27+00:00] RESULT exit=0
-[2026-09-15T18:27:27+00:00] COMMAND docker compose up --build --detach --wait registry search-agent evidence-agent synthesis-agent
-[2026-09-15T18:27:54+00:00] RESULT exit=0
-[2026-09-15T18:27:54+00:00] COMMAND docker compose --profile workflow run --rm orchestrator --question Welche Vorteile und Grenzen haben Retrieval-Systeme? --top-k 2
-[2026-09-15T18:27:59+00:00] RESULT exit=0
+[2026-09-18T11:52:47+00:00] COMMAND docker compose config --quiet
+[2026-09-18T11:52:48+00:00] RESULT exit=0
+[2026-09-18T11:52:48+00:00] COMMAND docker compose up --build --detach --wait litellm registry search-agent evidence-agent synthesis-agent
+[2026-09-18T11:53:09+00:00] RESULT exit=0
+LITELLM_HEALTH status=ok endpoint=/health/liveliness
+EXAMPLE_START index=1 question=Welche Vorteile und Grenzen haben Retrieval-Systeme?
+[2026-09-18T11:53:09+00:00] COMMAND docker compose --profile workflow run --rm orchestrator --question Welche Vorteile und Grenzen haben Retrieval-Systeme? --top-k 2
+[2026-09-18T11:53:14+00:00] RESULT exit=0
 INFO REGISTRY_LOOKUP capability=research.search
 INFO AGENT_SELECTED capability=research.search agent_id=search-agent url=http://search-agent:8101/a2a
 INFO A2A_CALL step=search agent_id=search-agent
@@ -18,6 +20,34 @@ INFO AGENT_SELECTED capability=research.synthesize agent_id=synthesis-agent url=
 INFO A2A_CALL step=synthesis agent_id=synthesis-agent
 INFO WORKFLOW_COMPLETED question='Welche Vorteile und Grenzen haben Retrieval-Systeme?' agents=search-agent,evidence-agent,synthesis-agent findings=2
 SUMMARY agents=3 search_hits=2 evidence_items=2 synthesis_findings=2
-[2026-09-15T18:27:59+00:00] COMMAND docker compose down --remove-orphans
-[2026-09-15T18:28:01+00:00] RESULT exit=0
+EXAMPLE_START index=2 question=Wie wichtig sind Evaluation und Zitate für RAG-Systeme?
+[2026-09-18T11:53:14+00:00] COMMAND docker compose --profile workflow run --rm orchestrator --question Wie wichtig sind Evaluation und Zitate für RAG-Systeme? --top-k 2
+[2026-09-18T11:53:17+00:00] RESULT exit=0
+INFO REGISTRY_LOOKUP capability=research.search
+INFO AGENT_SELECTED capability=research.search agent_id=search-agent url=http://search-agent:8101/a2a
+INFO A2A_CALL step=search agent_id=search-agent
+INFO REGISTRY_LOOKUP capability=research.extract_evidence
+INFO AGENT_SELECTED capability=research.extract_evidence agent_id=evidence-agent url=http://evidence-agent:8102/a2a
+INFO A2A_CALL step=evidence agent_id=evidence-agent
+INFO REGISTRY_LOOKUP capability=research.synthesize
+INFO AGENT_SELECTED capability=research.synthesize agent_id=synthesis-agent url=http://synthesis-agent:8103/a2a
+INFO A2A_CALL step=synthesis agent_id=synthesis-agent
+INFO WORKFLOW_COMPLETED question='Wie wichtig sind Evaluation und Zitate für RAG-Systeme?' agents=search-agent,evidence-agent,synthesis-agent findings=1
+SUMMARY agents=3 search_hits=1 evidence_items=1 synthesis_findings=1
+EXAMPLE_START index=3 question=Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?
+[2026-09-18T11:53:17+00:00] COMMAND docker compose --profile workflow run --rm orchestrator --question Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search? --top-k 2
+[2026-09-18T11:53:21+00:00] RESULT exit=0
+INFO REGISTRY_LOOKUP capability=research.search
+INFO AGENT_SELECTED capability=research.search agent_id=search-agent url=http://search-agent:8101/a2a
+INFO A2A_CALL step=search agent_id=search-agent
+INFO REGISTRY_LOOKUP capability=research.extract_evidence
+INFO AGENT_SELECTED capability=research.extract_evidence agent_id=evidence-agent url=http://evidence-agent:8102/a2a
+INFO A2A_CALL step=evidence agent_id=evidence-agent
+INFO REGISTRY_LOOKUP capability=research.synthesize
+INFO AGENT_SELECTED capability=research.synthesize agent_id=synthesis-agent url=http://synthesis-agent:8103/a2a
+INFO A2A_CALL step=synthesis agent_id=synthesis-agent
+INFO WORKFLOW_COMPLETED question='Welche risk-, compliance- und privacy-Aspekte gelten für high stakes organizational search?' agents=search-agent,evidence-agent,synthesis-agent findings=2
+SUMMARY agents=3 search_hits=2 evidence_items=2 synthesis_findings=2
+[2026-09-18T11:53:21+00:00] COMMAND docker compose down --remove-orphans
+[2026-09-18T11:53:24+00:00] RESULT exit=0
 CLEANUP compose_down=ok

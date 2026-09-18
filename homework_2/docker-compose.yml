@@ -1,4 +1,14 @@
 services:
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:main-latest
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    ports:
+      - "4000:4000"
+    volumes:
+      - "./litellm_config.yaml:/app/config.yaml:ro"
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+
   registry:
     build: .
     command:

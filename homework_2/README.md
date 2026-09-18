@@ -4,8 +4,8 @@
 
 The shared FastAPI/A2A protocol layer, dynamic registry, Literature Search,
 Evidence Extraction and Synthesis Agents are available. The Orchestrator now
-discovers all three agents dynamically by capability. Docker Compose and the
-final workflow evidence are added in the following commits.
+discovers all three agents dynamically by capability. The checked-in evidence
+contains three successful containerized sample workflows.
 
 ## Local setup
 
@@ -58,8 +58,9 @@ Docker Desktop with Compose is required. The same four processes can be
 started as containers:
 
 ```powershell
+Copy-Item .env.example .env
 docker compose config --quiet
-docker compose up --build -d registry search-agent evidence-agent synthesis-agent
+docker compose up --build -d litellm registry search-agent evidence-agent synthesis-agent
 docker compose --profile workflow run --rm orchestrator `
   --question "Welche Vorteile und Grenzen haben Retrieval-Systeme?" `
   --top-k 2
@@ -71,15 +72,31 @@ Orchestrator receives their container URLs from the Registry, so no agent URL
 is hard-coded into the workflow. The Compose `orchestrator` service is kept in
 the `workflow` profile because it is a one-shot command.
 
+The Compose file also includes the optional local LiteLLM proxy copied from
+Homework 1. It is available at `http://localhost:4000/v1` and routes the
+`homework-model` alias to OpenRouter when a real `OPENROUTER_API_KEY` is
+provided in `.env`. The A2A workflow itself uses the local deterministic
+corpus and does not require an LLM request.
+
+To start the proxy together with the A2A services:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build -d litellm registry search-agent evidence-agent synthesis-agent
+```
+
+No LiteLLM or OpenRouter request is needed to run the graded A2A sample.
+
 ## Submission evidence
 
 Generate the execution log, structured result and focused terminal screenshot
 with:
 
 ```powershell
-uv run python scripts/run_demo.py
+uv run python scripts/run_demo.py  # runs three sample questions
 uv run python docs/create_submission_pdf.py
 ```
 
 The one-page summary is available at `docs/submission_summary.md`; generated
-PDF and evidence files are stored under `output/`.
+PDF and evidence files are stored under `output/`. The complete multi-sample
+results are in `output/evidence/workflow-samples.json`.

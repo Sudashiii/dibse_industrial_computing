@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import textwrap
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EVIDENCE_DIR = PROJECT_ROOT / "output" / "evidence"
 DEFAULT_PDF = PROJECT_ROOT / "output" / "pdf" / "homework_2_submission_summary.pdf"
 REPOSITORY_URL = "https://github.com/Sudashiii/dibse_industrial_computing"
+README_URL = f"{REPOSITORY_URL}/blob/main/homework/homework_2/README.md"
 
 NAVY = colors.HexColor("#0f172a")
 SLATE = colors.HexColor("#334155")
@@ -47,21 +49,29 @@ def create_terminal_screenshot(log_path: Path, output_path: Path) -> None:
     """Render only relevant workflow lines as a readable terminal image."""
 
     log_lines = log_path.read_text(encoding="utf-8").splitlines()
-    markers = (
-        "question=",
-        "COMMAND docker compose",
-        "REGISTRY_LOOKUP",
-        "AGENT_SELECTED",
-        "A2A_CALL",
-        "WORKFLOW_COMPLETED",
-        "SUMMARY",
-        "CLEANUP",
-    )
-    selected = [
-        line.strip()
-        for line in log_lines
-        if any(marker in line for marker in markers)
-    ]
+    selected: list[str] = []
+    completed_examples = 0
+    for raw_line in log_lines:
+        line = raw_line.strip()
+        keep = (
+            "COMMAND docker compose up" in line
+            or "LITELLM_HEALTH" in line
+            or "WORKFLOW_COMPLETED" in line
+            or "SUMMARY" in line
+            or "CLEANUP" in line
+            or (
+                completed_examples == 0
+                and "COMMAND docker compose --profile workflow run" in line
+            )
+            or (
+                completed_examples == 0
+                and ("REGISTRY_LOOKUP" in line or "A2A_CALL" in line)
+            )
+        )
+        if keep:
+            selected.append(line)
+        if "WORKFLOW_COMPLETED" in line:
+            completed_examples += 1
     if not selected:
         raise ValueError("Execution log does not contain workflow evidence.")
 
@@ -101,6 +111,91 @@ def create_terminal_screenshot(log_path: Path, output_path: Path) -> None:
         "Only registry lookups, agent calls and workflow totals are shown.",
         fill="#94a3b8",
         font=_font(20),
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output_path)
+
+
+def create_samples_screenshot(
+    samples: list[dict[str, Any]],
+    output_path: Path,
+) -> None:
+    """Render a compact screenshot of the three completed sample requests."""
+
+    width, height = 1800, 620
+    image = Image.new("RGB", (width, height), "#0f172a")
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, width, 82), fill="#1e293b")
+    for x, color in ((42, "#fb7185"), (82, "#facc15"), (122, "#34d399")):
+        draw.ellipse((x, 30, x + 22, 52), fill=color)
+    draw.text(
+        (180, 23),
+        "A2A sample requests - parsed workflow results",
+        fill="#e2e8f0",
+        font=_font(28, bold=True),
+    )
+
+    card_gap = 24
+    card_x = 48
+    card_y = 108
+    card_width = (width - 2 * card_x - 2 * card_gap) / 3
+    card_height = 440
+    title_font = _font(23, bold=True)
+    body_font = _font(21)
+    small_font = _font(18)
+    for index, sample in enumerate(samples[:3], start=1):
+        x = card_x + (index - 1) * (card_width + card_gap)
+        draw.rounded_rectangle(
+            (x, card_y, x + card_width, card_y + card_height),
+            radius=16,
+            fill="#172033",
+            outline="#334155",
+            width=2,
+        )
+        draw.text((x + 22, card_y + 18), f"EXAMPLE {index}", fill="#67e8f9", font=title_font)
+        question = str(sample.get("question", ""))
+        y = card_y + 62
+        draw.text((x + 22, y), "QUESTION", fill="#94a3b8", font=small_font)
+        y += 29
+        for line in textwrap.wrap(question, width=34, break_long_words=False):
+            draw.text((x + 22, y), line, fill="#f8fafc", font=body_font)
+            y += 27
+
+        agents = sample.get("agents", [])
+        search = sample.get("search", {})
+        evidence = sample.get("evidence", {})
+        synthesis = sample.get("synthesis", {})
+        hit_ids = ", ".join(hit.get("paper_id", "?") for hit in search.get("hits", [])) or "none"
+        draw.text((x + 22, y + 14), f"REGISTRY -> {len(agents)} agents", fill="#67e8f9", font=body_font)
+        draw.text((x + 22, y + 48), f"SEARCH hits: {hit_ids}", fill="#e2e8f0", font=small_font)
+        draw.text(
+            (x + 22, y + 77),
+            f"EVIDENCE items: {len(evidence.get('evidence', []))}",
+            fill="#e2e8f0",
+            font=small_font,
+        )
+        draw.text(
+            (x + 22, y + 106),
+            f"SYNTHESIS findings: {len(synthesis.get('key_findings', []))}",
+            fill="#34d399",
+            font=small_font,
+        )
+        finding = ""
+        findings = synthesis.get("key_findings", [])
+        if findings:
+            finding = str(findings[0])
+        y += 152
+        draw.text((x + 22, y), "FIRST FINDING", fill="#94a3b8", font=small_font)
+        y += 27
+        for line in textwrap.wrap(finding or "No matching corpus item", width=34, break_long_words=False)[:4]:
+            draw.text((x + 22, y), line, fill="#cbd5e1", font=small_font)
+            y += 23
+
+    draw.text(
+        (48, height - 38),
+        "All values are parsed from workflow-samples.json; no credentials or external model calls are shown.",
+        fill="#94a3b8",
+        font=_font(18),
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path)
@@ -204,7 +299,9 @@ def _flow_box(
 def build_pdf(
     data: dict[str, Any],
     *,
+    samples: list[dict[str, Any]],
     terminal_image: Path,
+    sample_image: Path,
     output_path: Path,
 ) -> None:
     """Build the one-page visual summary with aspect-ratio-safe evidence."""
@@ -212,6 +309,8 @@ def build_pdf(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     page_width, page_height = A4
     page = canvas.Canvas(str(output_path), pagesize=A4)
+    page.setTitle("Homework 2 - Distributed Remote A2A System")
+    page.setAuthor("Industrial Computing Homework")
     margin = 36
 
     page.setFillColor(NAVY)
@@ -249,11 +348,17 @@ def build_pdf(
     search_hits = data.get("search", {}).get("hits", [])
     evidence_items = data.get("evidence", {}).get("evidence", [])
     findings = data.get("synthesis", {}).get("key_findings", [])
+    total_hits = sum(
+        len(sample.get("search", {}).get("hits", [])) for sample in samples
+    )
+    total_evidence = sum(
+        len(sample.get("evidence", {}).get("evidence", [])) for sample in samples
+    )
     checks = [
-        f"- {len(agents)} registered agents",
-        f"- {len(search_hits)} search hits -> {len(evidence_items)} evidence items",
-        f"- {len(findings)} synthesis findings returned",
-        "- Compose config, image build and workflow passed",
+        f"- {len(agents)} registered agents per run",
+        f"- {len(samples)} sample requests completed",
+        f"- {total_hits} search hits -> {total_evidence} evidence items",
+        "- LiteLLM liveness and Compose passed",
     ]
     y = card_y + card_h - 39
     for line in checks:
@@ -280,18 +385,29 @@ def build_pdf(
 
     lower_y = image_top - target_height - 17
     lower_h = 137
-    _card(page, x=margin, y=lower_y - lower_h, width=card_w, height=lower_h, title="Evidence files")
-    evidence_lines = [
-        "- execution.log: focused command and agent trace",
-        "- workflow-output.json: complete structured result",
-        "- terminal-screenshot.png: relevant output only",
-        "- README and Compose commands are reproducible",
-    ]
-    y = lower_y - 33
-    for line in evidence_lines:
-        y = _paragraph(page, line, x=margin + 12, y=y, width=card_w - 24, font_size=8.0, leading=12)
+    lower_bottom = lower_y - lower_h
+    _card(page, x=margin, y=lower_bottom, width=card_w, height=lower_h, title="Sample evidence")
+    sample = Image.open(sample_image)
+    sample_width, sample_height = sample.size
+    sample_box_width = card_w - 18
+    sample_box_height = 83
+    sample_scale = min(sample_box_width / sample_width, sample_box_height / sample_height)
+    sample_draw_width = sample_width * sample_scale
+    sample_draw_height = sample_height * sample_scale
+    page.drawImage(
+        ImageReader(sample),
+        margin + (card_w - sample_draw_width) / 2,
+        lower_bottom + 20,
+        width=sample_draw_width,
+        height=sample_draw_height,
+        preserveAspectRatio=True,
+        mask="auto",
+    )
+    page.setFillColor(MUTED)
+    page.setFont("Helvetica", 6.8)
+    page.drawString(margin + 12, lower_bottom + 8, "Three live questions; full JSON and log are linked below.")
 
-    _card(page, x=right_x, y=lower_y - lower_h, width=card_w, height=lower_h, title="Integration flow", fill=PALE_BLUE)
+    _card(page, x=right_x, y=lower_bottom, width=card_w, height=lower_h, title="Integration flow", fill=PALE_BLUE)
     flow_y = lower_y - 85
     page.setFillColor(MUTED)
     page.setFont("Helvetica", 7.3)
@@ -312,7 +428,8 @@ def build_pdf(
     page.line(margin, 34, page_width - margin, 34)
     page.setFillColor(MUTED)
     page.setFont("Helvetica", 7.5)
-    page.drawString(margin, 21, "Links: README | output/evidence/execution.log | workflow-output.json")
+    page.drawString(margin, 21, "Links: README | output/evidence/execution.log | workflow-samples.json")
+    page.linkURL(README_URL, (margin, 16, margin + 55, 29))
     page.drawRightString(page_width - margin, 21, "Focused evidence - no credentials included")
     page.showPage()
     page.save()
@@ -330,17 +447,28 @@ def main() -> int:
     evidence_dir = Path(args.evidence_dir)
     output_path = Path(args.output)
     workflow_path = evidence_dir / "workflow-output.json"
+    samples_path = evidence_dir / "workflow-samples.json"
     log_path = evidence_dir / "execution.log"
     if not workflow_path.exists() or not log_path.exists():
         raise FileNotFoundError(
             "Run scripts/run_demo.py before creating the submission PDF."
         )
     data = json.loads(workflow_path.read_text(encoding="utf-8"))
+    samples = json.loads(samples_path.read_text(encoding="utf-8")) if samples_path.exists() else [data]
     terminal_image = evidence_dir / "terminal-screenshot.png"
+    sample_image = evidence_dir / "sample-results.png"
     create_terminal_screenshot(log_path, terminal_image)
-    build_pdf(data, terminal_image=terminal_image, output_path=output_path)
+    create_samples_screenshot(samples, sample_image)
+    build_pdf(
+        data,
+        samples=samples,
+        terminal_image=terminal_image,
+        sample_image=sample_image,
+        output_path=output_path,
+    )
     print(f"Created {output_path}")
     print(f"Created {terminal_image}")
+    print(f"Created {sample_image}")
     return 0
 
 
